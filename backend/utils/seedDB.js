@@ -7,7 +7,6 @@ const seed = async () => {
   await Organization.create({
     name: 'Demo Org',
     description: 'Sample organization',
-    location: { type: 'Point', coordinates: [0, 0] },
   });
   console.log('Seed completed');
   process.exit();

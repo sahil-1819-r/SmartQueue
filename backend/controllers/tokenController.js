@@ -2,7 +2,6 @@ import Counter from '../models/Counter.model.js';
 import Queue from '../models/Queue.model.js';
 import Token from '../models/Token.model.js';
 import { estimateEta } from '../services/eta.service.js';
-import { emitQueueEvent } from '../services/socket.service.js';
 import { log } from '../utils/logger.js';
 
 const getNextTokenNumber = async (queueId) => {
@@ -45,7 +44,6 @@ export const joinQueue = async (req, res, next) => {
       log('TOKEN', `User ${req.user?._id} joined queue ${queueId} - Token: #${token.number}`);
     }
 
-    emitQueueEvent(queueId, statusEvent, token);
     res.status(201).json(token);
   } catch (error) {
     next(error);
@@ -76,10 +74,8 @@ export const markTokenDone = async (req, res, next) => {
       await nextToken.save();
       await Queue.findByIdAndUpdate(token.queue, { nowServing: nextToken.number });
       log('TOKEN', `Auto-shifting: Now serving token #${nextToken.number} for queue ${token.queue}.`);
-      emitQueueEvent(token.queue, 'token:nowServing', nextToken);
     }
 
-    emitQueueEvent(token.queue, 'token:completed', token);
     res.json(token);
   } catch (error) {
     next(error);
