@@ -1,2 +1,0 @@
-# SmartQueue
-hackathon project
