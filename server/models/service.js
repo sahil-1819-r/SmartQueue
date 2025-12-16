@@ -1,24 +1,31 @@
 import mongoose, { model } from "mongoose";
 const Schema = mongoose.Schema;
 
-
-const serviceSchema = new Schema({
-    name:{
-        type:String,
-        required:true,
+const serviceSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
     },
-    queue:[{
-        type:Schema.Types.ObjectId,
-        ref:"User",
-    }],
-    startAt:{
-        type:Date,
-        required:true
+    orgId: {
+      type: Schema.Types.ObjectId,
+      ref: "Organisation",
     },
-    endAt:{
-        type:Date,
-        required:true
-    }
-})
+    startAt: {
+      type: Date,
+      required: true,
+    },
+    endAt: {
+      type: Date,
+      required: true,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  { timestamps: true }
+);
 
-module.exports(mongoose.model("Service",serviceSchema));
+const Service = mongoose.model("Service", serviceSchema);
+export default Service;

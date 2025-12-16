@@ -14,4 +14,4 @@ const orgSchema = new Schema({
 })
 
 
-module.exports(mongoose.model("Organisation",orgSchema))
+module.exports(mongoose.model("Organisation",orgSchema));

@@ -15,14 +15,6 @@ const userSchema = new Schema({
     password:{
         type:String,
         required:true
-    },
-    registeredOrgs:[{
-        type:Schema.Types.ObjectId,
-        ref:"Organisation"
-    }],
-    queue:{
-        type:Schema.Types.ObjectId,
-        ref:"Service"
     }
 })
 
