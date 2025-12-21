@@ -16,7 +16,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/SmartQueue")
 .then(()=>console.log("connected with database"))
 .catch((err)=>console.log(err));
 app.use(cors({
-  origin:"http://localhost:4200",
+  origin:"http://localhost:5173",
   credentials:true,
   allowedHeaders: ["Content-Type", "Authorization"]
 }))
