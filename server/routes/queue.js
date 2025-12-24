@@ -3,6 +3,12 @@ const router = express.Router();
 import Service from "../models/service.js";
 import Ticket from "../models/ticket.js";
 
+router.get("/hub",async(req,res)=>{
+    let hub = await Service.find();
+    console.log("services: ", hub);
+    res.status(200).json(hub);
+});
+
 router.post("/queue", async (req, res) => {
   let { name, startAt, endAt } = req.body;
 
