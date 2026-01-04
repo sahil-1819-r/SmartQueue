@@ -1,28 +1,15 @@
-import express from "express";
-import cors from 'cors';
-import queueRoutes from './routes/queue.js'
-import authRoutes from './routes/auth.js'
 import mongoose from "mongoose";
-const app = express();
-const port = 8080;
+import 'dotenv/config'
+import app from './app.js'
+const port = process.env.PORT;
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json())
+mongoose
+  .connect("mongodb://127.0.0.1:27017/SmartQueue")
+  .then(() => {
+    app.listen(port, () => {
+      console.log("listening on port" + `http://localhost:${port}`);
+    });
+    console.log("connected with database");
 
-app.listen(port, () => {
-  console.log("listening on port" + `http://localhost:${port}`);
-});
-
-mongoose.connect("mongodb://127.0.0.1:27017/SmartQueue")
-.then(()=>console.log("connected with database"))
-.catch((err)=>console.log(err));
-app.use(cors({
-  origin:"http://localhost:5173",
-  credentials:true,
-  allowedHeaders: ["Content-Type", "Authorization"]
-}))
-app.get("/api", (req, res) => {
-  res.status(201).json("landing page");
-});
-app.use("/api",authRoutes);
-app.use("/api",queueRoutes);
+  })
+  .catch((err) => console.log(err));
