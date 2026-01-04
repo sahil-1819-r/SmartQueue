@@ -26,7 +26,7 @@ const Hub = () => {
           <div
             key={service._id}
             onClick={() => navigate(`/queue/${service._id}`)}
-            className={`cursor-pointer rounded-3xl border p-8 transition-all hover:-translate-y-1 hover:shadow-xl ${theme==='dark'?'border-[#1f2937] bg-[#0b0f14]':'bg-white border-slate-200'}`}
+            className={`cursor-pointer rounded-3xl border p-8 transition-all hover:-translate-y-1 shadow-4xl  ${theme==='dark'?'border-[#1f2937] bg-[#08101a] shadow-blue-500 ':'bg-white shadow-black border-slate-400'}`}
           >
             <h2 className={` ${theme==='dark'?'text-amber-50':'text-black'}  text-xl font-bold mb-3`}>
               {service.name}

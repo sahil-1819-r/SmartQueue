@@ -1,5 +1,4 @@
-import mongoose, { model } from "mongoose";
-const Schema = mongoose.Schema;
+import mongoose, { Schema } from "mongoose";
 
 const serviceSchema = new Schema(
   {
@@ -7,17 +6,9 @@ const serviceSchema = new Schema(
       type: String,
       required: true,
     },
-    orgId: {
+    organisation: {
       type: Schema.Types.ObjectId,
       ref: "Organisation",
-    },
-    startAt: {
-      type: Date,
-      required: true,
-    },
-    endAt: {
-      type: Date,
-      required: true,
     },
     isActive: {
       type: Boolean,
@@ -27,5 +18,5 @@ const serviceSchema = new Schema(
   { timestamps: true }
 );
 
-const Service = mongoose.model("Service", serviceSchema);
-export default Service;
+
+export default mongoose.model("Service",serviceSchema);

@@ -1,13 +1,18 @@
+import jwt from "jsonwebtoken";
+import { CustomError } from "./CustomError.js";
 import "dotenv/config";
-import bcrypt from "bcrypt";
-import jwt, { decode } from "jsonwebtoken";
 
-const auth = async (req,res,next) =>{
-   const header = req.headers.authorization;
-   if ( !header || !header.startswith("Bearer ")){
-    return res.status(400).json({error:"no token provided"});
-   }
-   const token = header.split(" ")[1];
-   const decoded = jwt.verify(token,process.env.JWT_SECRET_KEY);
-   req.user = decoded;
-}
+const auth = async (req, res) => {
+  const header = req.headers.authorization;
+  if (!header || !header.startsWith("Bearer ")) {
+    throw new CustomError(401, "Not Authorized");
+  }
+
+  const token = header.split(" ")[1];
+  const decode = jwt.verify(token, process.env.JWT_SECRET);
+
+  req.user = decode;
+  return next();
+};
+
+export default auth;
