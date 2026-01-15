@@ -21,8 +21,13 @@ export const login = async (req, res) => {
 
   let token = generateToken(user);
 
-  return res.json({
-    token,
+  res.cookie("token", token, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: false,
+  });
+
+  return res.status(200).json({
     user: {
       _id: user._id,
       username: user.username,
@@ -48,14 +53,29 @@ export const signup = async (req, res) => {
     role: role,
   });
 
+  await user.save();
+
   const token = generateToken(user);
-  return res.json({
-    token,
+  res.cookie("token", token, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: false,
+  });
+
+  return res.status(200).json({
     user: {
       _id: user._id,
       username: user.username,
-      email: user.email,
       role: user.role,
     },
+    token,
   });
+};
+
+export const getMe = async (req, res) => {
+  const userId = req.user._id;
+
+  let user = await User.findById(userId);
+
+  res.status(200).json({ user });
 };
