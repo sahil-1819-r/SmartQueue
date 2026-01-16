@@ -4,19 +4,17 @@ import { CustomError } from "../middlewares/CustomError.js";
 
 export const hub = async (req, res) => {
   let hub = await Queue.find();
-  console.log("queues: ", hub);
   res.status(200).json(hub);
 };
 
 export const createQueue = async (req, res) => {
   let { name, startAt, endAt } = req.body;
-
+  console.log(req.user);
   let queue = await Queue.create({
     name,
     startAt,
     endAt,
   });
-  await Queue.save();
   res.status(201).json(queue);
 };
 
@@ -29,8 +27,9 @@ export const showTickets = async (req, res) => {
 
 export const joinQueue = async (req, res) => {
   let { queueId } = req.params;
-  let { userId } = req.body;
-
+  console.log(req.user);
+  let userId = req.user.id;
+  console.log("queueId:",queueId);
   let queue = await Queue.findById({ _id: queueId });
   console.log("service:", queue);
   if (!queue || !queue.isActive) {
