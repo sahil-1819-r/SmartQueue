@@ -17,7 +17,7 @@ function App() {
         <Navbar />
         <ScrollToTop />
         <AnimatePresence mode="wait">
-          <Routes>
+          <Routes location={location} key={location.pathname} >
             <Route path="/hub" element={<Hub />} />
             <Route path="/" element={<LandingPage />} />
             <Route path="queue" element={<CreateQueue />} />
