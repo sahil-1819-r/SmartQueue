@@ -1,9 +1,7 @@
-import React, { useContext } from "react";
 import { Users, Twitter, Github, Linkedin } from "lucide-react";
-import { Mycontext } from "./Mycontext";
-
-export const Footer = () => {
-  const { theme } = useContext(Mycontext);
+import { useSelector } from "react-redux";
+const Footer = () => {
+  let theme = useSelector((state) => state.theme.mode);
 
   return (
     <footer
@@ -77,3 +75,4 @@ export const Footer = () => {
     </footer>
   );
 };
+export default Footer;

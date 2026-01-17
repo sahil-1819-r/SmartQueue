@@ -1,15 +1,12 @@
-import React, { useContext } from "react";
 import { motion } from "framer-motion";
-import { Clock, PlusCircle, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router";
-import { Mycontext } from "./Mycontext.jsx";
 import api from "../api/api.js";
 import { useDispatch, useSelector } from "react-redux";
 import { updateInput } from "../redux/features/createQueueSlice.js";
 
 export const CreateQueue = () => {
   motion;
-  const { theme } = useContext(Mycontext);
+  let theme = useSelector((state) => state.theme.mode);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let formData = useSelector((state) => state.createQueue.formData);
@@ -139,3 +136,4 @@ export const CreateQueue = () => {
     </div>
   );
 };
+export default CreateQueue;

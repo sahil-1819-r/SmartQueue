@@ -1,16 +1,14 @@
-import React, { useContext } from "react";
 import { motion } from "framer-motion";
 import { Mail, Lock, User } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import api from "../api/api.js";
-import { Mycontext } from "../components/Mycontext";
 import { updateSignup } from "../redux/features/signUpSlice.js";
 import { setUser } from "../redux/features/userSlilce";
 
-export const Signup = () => {
+const Signup = () => {
   motion;
-  const { theme } = useContext(Mycontext);
+  let theme = useSelector((state) => state.theme.mode);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -196,3 +194,5 @@ export const Signup = () => {
     </div>
   );
 };
+
+export default Signup;

@@ -1,18 +1,16 @@
-import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateInput } from "../redux/features/loginSlice";
 import { setUser } from "../redux/features/userSlilce";
 import api from "../api/api.js";
-import { Mycontext } from "../components/Mycontext";
 import { motion } from "framer-motion";
 import { Lock, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export const Login = () => {
+const Login = () => {
   motion;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { theme } = useContext(Mycontext);
+  let theme = useSelector((state) => state.theme.mode);
   const formData = useSelector((state) => state.login.formData);
 
   const submitHandler = async (e) => {
@@ -139,3 +137,4 @@ export const Login = () => {
     </div>
   );
 };
+export default Login;

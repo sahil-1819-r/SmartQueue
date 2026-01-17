@@ -1,20 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Mycontext } from "./Mycontext";
+import React, { useEffect, useState } from "react";
 import { Users, Sun, Moon, Menu, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-
-export const Navbar = () => {
+import { useDispatch, useSelector } from "react-redux";
+import { toggleTheme } from "../redux/features/themeSlice";
+const Navbar = () => {
   motion;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const gotoSignup = () => {
     navigate("/signup");
   };
   const user = useSelector((state) => state.user.currentUser);
-  const { theme, setTheme } = useContext(Mycontext);
-  const toggleTheme = () =>
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  let theme = useSelector((state) => state.theme.mode);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -61,7 +59,9 @@ export const Navbar = () => {
             } w-px h-6 `}
           ></div>
           <button
-            onClick={toggleTheme}
+            onClick={() => {
+              dispatch(toggleTheme());
+            }}
             className={`p-2.5 rounded-xl transition-all ${
               theme === "dark"
                 ? "hover:bg-[#111827] text-[#38bdf8]"
@@ -82,7 +82,12 @@ export const Navbar = () => {
         </div>
 
         <div className="md:hidden flex items-center gap-4">
-          <button onClick={toggleTheme} className="p-2">
+          <button
+            onClick={() => {
+              dispatch(toggleTheme());
+            }}
+            className="p-2"
+          >
             {theme === "dark" ? (
               <Sun
                 size={20}
@@ -124,20 +129,6 @@ export const Navbar = () => {
             }`}
           >
             <div className="px-6 py-8 flex flex-col gap-5">
-              <a
-                href="#features"
-                onClick={() => setIsMenuOpen(false)}
-                className="text-lg font-medium"
-              >
-                Why SmartQueue?
-              </a>
-              <a
-                href="#how-it-works"
-                onClick={() => setIsMenuOpen(false)}
-                className="text-lg font-medium"
-              >
-                How it Works
-              </a>
               <button
                 onClick={gotoSignup}
                 className="bg-[#2563eb] text-white w-full py-4 rounded-2xl font-bold shadow-lg shadow-blue-500/10"
@@ -151,3 +142,4 @@ export const Navbar = () => {
     </nav>
   );
 };
+export default Navbar;

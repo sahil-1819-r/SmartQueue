@@ -1,5 +1,3 @@
-import React, { useContext } from "react";
-import { Mycontext } from "../components/Mycontext";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import {
@@ -22,7 +20,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const LandingPage = () => {
   motion;
   const user = useSelector((state) => state.user.currentUser);
-  const { theme } = useContext(Mycontext);
+  let theme = useSelector((state) => state.theme.mode);
 
   const navigate = useNavigate();
   const createQueue = () => {
@@ -549,5 +547,4 @@ const LandingPage = () => {
     </div>
   );
 };
-
 export default LandingPage;
