@@ -7,16 +7,25 @@ import { setQueue } from "../../redux/features/queueSlice.js";
 
 const QueueList = () => {
   motion;
+  const user = useSelector((state) => state.user.currentUser);
+  console.log("user:", user);
   const theme = useSelector((state) => state.theme.mode);
   const { queueId } = useParams();
   const dispatch = useDispatch();
   const queue = useSelector((state) => state.queue.queue);
-
+  console.log("user fort:", user);
   const joinQueue = async () => {
-    const response = await api.post(`/queue/${queueId}/join`);
-    const updatedQueue = [...queue, response.data];
-    dispatch(setQueue(updatedQueue));
+    try {
+      const response = await api.post(`/queue/${queueId}/join`);
+      const updatedQueue = [...queue, response.data];
+      dispatch(setQueue(updatedQueue));
+    } catch (err) {
+      // return <Error err={err} />
+      console.log(err);
+    }
   };
+
+  const isJoined = queue.some((entry) => entry.userId === user?._id);
 
   return (
     <div className="space-y-5">
@@ -48,7 +57,7 @@ const QueueList = () => {
               className={`font-medium
                 ${theme === "dark" ? "text-[#e5e7eb]" : "text-slate-900"}`}
             >
-              {entry.userName || "Anonymous"}
+              {entry.userId===user._id?"You":"Anonymous"}
             </span>
 
             {/* Status */}
@@ -66,19 +75,21 @@ const QueueList = () => {
       </AnimatePresence>
 
       {/* Join button */}
-      <motion.button
-        whileHover={{ y: -1 }}
-        whileTap={{ scale: 0.97 }}
-        onClick={joinQueue}
-        className={`w-full mt-6 flex items-center justify-center gap-3 py-4 rounded-2xl font-semibold transition-colors
+      {!isJoined && queue.isActive &&  (
+        <motion.button
+          whileHover={{ y: -1 }}
+          whileTap={{ scale: 0.97 }}
+          onClick={joinQueue}
+          className={`w-full mt-6 flex items-center justify-center gap-3 py-4 rounded-2xl font-semibold transition-colors
           ${
             theme === "dark"
               ? "bg-[#1f2a44] text-[#e5e7eb] hover:bg-[#24304d]"
               : "bg-blue-600/10 text-blue-700 hover:bg-blue-600/20"
           }`}
-      >
-        Join queue <UserPlus size={18} />
-      </motion.button>
+        >
+          Join queue <UserPlus size={18} />
+        </motion.button>
+      )}
     </div>
   );
 };

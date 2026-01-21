@@ -56,7 +56,8 @@ const EmptyQueueState = ({ queueId }) => {
       </p>
 
       {/* Action */}
-      <motion.button
+      {
+        queue.isActive && <motion.button
         whileHover={{ y: -1 }}
         whileTap={{ scale: 0.97 }}
         onClick={joinQueue}
@@ -69,6 +70,7 @@ const EmptyQueueState = ({ queueId }) => {
       >
         Join queue <UserPlus size={18} />
       </motion.button>
+      }
     </motion.div>
   );
 };

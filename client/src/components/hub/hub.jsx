@@ -3,11 +3,27 @@ import { useNavigate } from "react-router";
 import { Users } from "lucide-react";
 import api from "../../api/api.js";
 import { useSelector } from "react-redux";
-
+import { useDispatch } from "react-redux";
+import { setUser, clearUser } from "../../redux/features/userSlilce.js";
 const Hub = () => {
   const theme = useSelector((state) => state.theme.mode);
   const [queues, setQueues] = useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const bootstrapAuth = async () => {
+      try {
+        const res = await api.get("/me", { withCredentials: true });
+        console.log("user: ", res.data);
+        dispatch(setUser(res.data.user));
+      } catch {
+        dispatch(clearUser());
+      }
+    };
+
+    bootstrapAuth();
+  }, [dispatch]);
 
   useEffect(() => {
     const load = async () => {

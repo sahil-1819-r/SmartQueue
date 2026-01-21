@@ -128,14 +128,16 @@ const Navbar = () => {
                 : "bg-[#f8fafc] border-slate-200"
             }`}
           >
-            <div className="px-6 py-8 flex flex-col gap-5">
-              <button
-                onClick={gotoSignup}
-                className="bg-[#2563eb] text-white w-full py-4 rounded-2xl font-bold shadow-lg shadow-blue-500/10"
-              >
-                Get started
-              </button>
-            </div>
+            {!user && (
+              <div className="px-6 py-8 flex flex-col gap-5">
+                <button
+                  onClick={gotoSignup}
+                  className="bg-[#2563eb] text-white w-full py-4 rounded-2xl font-bold shadow-lg shadow-blue-500/10"
+                >
+                  Get started
+                </button>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

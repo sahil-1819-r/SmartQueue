@@ -1,14 +1,30 @@
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import api from "../api/api.js";
 import { useDispatch, useSelector } from "react-redux";
 import { updateInput } from "../redux/features/createQueueSlice.js";
+import { setUser, clearUser } from "../redux/features/userSlilce.js";
 
 export const CreateQueue = () => {
   motion;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const bootstrapAuth = async () => {
+      try {
+        const res = await api.get("/me", { withCredentials: true });
+        console.log("user: ", res.data);
+        dispatch(setUser(res.data.user));
+      } catch {
+        dispatch(clearUser());
+      }
+    };
+
+    bootstrapAuth();
+  }, [dispatch]);
   let theme = useSelector((state) => state.theme.mode);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   let formData = useSelector((state) => state.createQueue.formData);
 
   const handleSubmit = async (e) => {
