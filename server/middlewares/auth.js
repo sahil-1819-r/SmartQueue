@@ -9,7 +9,8 @@ const auth = (req, res, next) => {
   }
   try {
     const decode = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decode;
+    req.userId = decode.id;
+    req.userRole = decode.role;
     return next();
   } catch (err) {
     throw new CustomError(401, err.message);

@@ -73,9 +73,15 @@ export const signup = async (req, res) => {
 };
 
 export const getMe = async (req, res) => {
-  const userId = req.user._id;
+  res.set({
+    "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+    Pragma: "no-cache",
+    Expires: "0",
+  });
 
-  let user = await User.findById(userId);
+  const userId = req.userId;
+  console.log("user id:", userId);
+  let user = await User.findById(userId).select("-password");
 
   res.status(200).json({ user });
 };

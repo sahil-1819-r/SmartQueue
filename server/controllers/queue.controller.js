@@ -28,7 +28,7 @@ export const showTickets = async (req, res) => {
 export const joinQueue = async (req, res) => {
   let { queueId } = req.params;
   console.log(req.user);
-  let userId = req.user.id;
+  let userId = req.userId;
   console.log("queueId:",queueId);
   let queue = await Queue.findById({ _id: queueId });
   console.log("service:", queue);
