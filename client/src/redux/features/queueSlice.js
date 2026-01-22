@@ -1,22 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const queueSlice = createSlice({
-    name:"queue",
-    initialState:{
-        queue:[]
+  name: "queue",
+  initialState: {
+    info: {},
+    tickets: [],
+  },
+  reducers: {
+    setInfo: (state, action) => {
+      state.info = action.payload;
     },
-    reducers:{
-        setQueue:(state,action)=>{
-            state.queue = action.payload;
-        },
-        enqueue:(state,action)=>{
-            state.queue.push(action.payload);
-        },
-        dequeue:(state)=>{
-          state.queue.shift();
-        }
-    }
+    setTickets: (state, action) => {
+      state.tickets = action.payload;
+    },
+    enqueue: (state, action) => {
+      state.tickets.push(action.payload);
+    },
+    dequeue: (state) => {
+      state.tickets.shift();
+    },
+  },
 });
 
-export const {setQueue,enqueue,dequeue} = queueSlice.actions;
+export const { setInfo, setTickets, enqueue, dequeue } = queueSlice.actions;
 export default queueSlice.reducer;
