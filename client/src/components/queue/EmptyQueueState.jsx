@@ -3,18 +3,19 @@ import { UserPlus } from "lucide-react";
 import api from "../../api/api.js";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { setQueue } from "../../redux/features/queueSlice.js";
+import { setTickets } from "../../redux/features/queueSlice.js";
 
 const EmptyQueueState = ({ queueId }) => {
   motion;
   const theme = useSelector((state) => state.theme.mode);
-  const queue = useSelector((state) => state.queue.queue);
+  let queue = useSelector((state) => state.queue.tickets);
+  console.log("tickets:", queue);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const joinQueue = async () => {
     const response = await api.post(`/queue/${queueId}/join`);
-    dispatch(setQueue([...queue, response.data]));
+    dispatch(setTickets([...queue, response.data]));
     navigate(`/queue/${queueId}`);
   };
 
@@ -33,11 +34,7 @@ const EmptyQueueState = ({ queueId }) => {
       {/* Title */}
       <h2
         className={`text-2xl font-bold tracking-tight mb-3
-        ${
-          theme === "dark"
-            ? "text-[#e5e7eb]"
-            : "text-slate-900"
-        }`}
+        ${theme === "dark" ? "text-[#e5e7eb]" : "text-slate-900"}`}
       >
         No one's in line yet
       </h2>
@@ -45,32 +42,28 @@ const EmptyQueueState = ({ queueId }) => {
       {/* Description */}
       <p
         className={`text-sm max-w-sm mx-auto mb-10
-        ${
-          theme === "dark"
-            ? "text-[#9ca3af]"
-            : "text-slate-500"
-        }`}
+        ${theme === "dark" ? "text-[#9ca3af]" : "text-slate-500"}`}
       >
         This queue is ready. Share the link or be the first to join and get
         things started.
       </p>
 
       {/* Action */}
-      {
-        queue.isActive && <motion.button
-        whileHover={{ y: -1 }}
-        whileTap={{ scale: 0.97 }}
-        onClick={joinQueue}
-        className={`mx-auto flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-semibold transition-colors
+      {console.log(queue.isActive) && (
+        <motion.button
+          whileHover={{ y: -1 }}
+          whileTap={{ scale: 0.97 }}
+          onClick={joinQueue}
+          className={`mx-auto flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-semibold transition-colors
           ${
             theme === "dark"
               ? "bg-[#1f2a44] text-[#e5e7eb] hover:bg-[#24304d]"
               : "bg-blue-600/10 text-blue-700 hover:bg-blue-600/20"
           }`}
-      >
-        Join queue <UserPlus size={18} />
-      </motion.button>
-      }
+        >
+          Join queue <UserPlus size={18} />
+        </motion.button>
+      )}
     </motion.div>
   );
 };

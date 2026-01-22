@@ -3,17 +3,17 @@ import { useParams, useNavigate } from "react-router";
 import { Users, ArrowLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../../api/api.js";
-import  QueueSkeleton  from "./QueueSkeleton.jsx";
-import  QueueList  from "./QueueList.jsx";
-import  EmptyQueueState  from "./EmptyQueueState.jsx";
+import QueueSkeleton from "./QueueSkeleton.jsx";
+import QueueList from "./QueueList.jsx";
+import EmptyQueueState from "./EmptyQueueState.jsx";
 import { useSelector, useDispatch } from "react-redux";
-import { setQueue } from "../../redux/features/queueSlice.js";
+import { setInfo, setTickets } from "../../redux/features/queueSlice.js";
 
 const Queue = () => {
   motion;
   const navigate = useNavigate();
   const theme = useSelector((state) => state.theme.mode);
-  const queue = useSelector((state) => state.queue.queue);
+  const { info:queue, tickets } = useSelector((state) => state.queue);
   const dispatch = useDispatch();
   const { queueId } = useParams();
   const [loading, setLoading] = useState(true);
@@ -24,13 +24,13 @@ const Queue = () => {
     const fetchQueue = async () => {
       const start = Date.now();
       const res = await api.get(`/queue/${queueId}`);
+      dispatch(setInfo(res.data.info));
 
       const elapsed = Date.now() - start;
       const MIN_TIME = 500;
-
       setTimeout(() => {
         if (isMounted) {
-          dispatch(setQueue(res.data));
+          dispatch(setTickets(res.data.tickets));
           setLoading(false);
         }
       }, Math.max(0, MIN_TIME - elapsed));
@@ -94,7 +94,7 @@ const Queue = () => {
 
             <span className="flex items-center gap-2">
               <Users size={14} />
-              {queue.length} in queue
+              {tickets.length} in queue
             </span>
           </div>
         </motion.div>
@@ -122,7 +122,7 @@ const Queue = () => {
               transition={{ duration: 0.35, ease: "easeOut" }}
             >
               {queue.length === 0 ? (
-                <EmptyQueueState queueId={queueId} />
+                <EmptyQueueState />
               ) : (
                 <QueueList />
               )}

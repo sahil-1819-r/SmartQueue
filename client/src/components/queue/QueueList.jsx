@@ -3,34 +3,32 @@ import { UserPlus } from "lucide-react";
 import { useParams } from "react-router";
 import api from "../../api/api.js";
 import { useDispatch, useSelector } from "react-redux";
-import { setQueue } from "../../redux/features/queueSlice.js";
+import { setTickets } from "../../redux/features/queueSlice.js";
 
 const QueueList = () => {
   motion;
   const user = useSelector((state) => state.user.currentUser);
-  console.log("user:", user);
   const theme = useSelector((state) => state.theme.mode);
   const { queueId } = useParams();
   const dispatch = useDispatch();
-  const queue = useSelector((state) => state.queue.queue);
-  console.log("user fort:", user);
+  const { info: queue, tickets } = useSelector((state) => state.queue);
   const joinQueue = async () => {
     try {
       const response = await api.post(`/queue/${queueId}/join`);
-      const updatedQueue = [...queue, response.data];
-      dispatch(setQueue(updatedQueue));
+      const updatedQueue = [...tickets, response.data];
+      dispatch(setTickets(updatedQueue));
     } catch (err) {
       // return <Error err={err} />
       console.log(err);
     }
   };
 
-  const isJoined = queue.some((entry) => entry.userId === user?._id);
+  const isJoined = tickets.some((entry) => entry.userId === user?._id);
 
   return (
     <div className="space-y-5">
       <AnimatePresence>
-        {queue.map((entry, idx) => (
+        {tickets.map((entry, idx) => (
           <motion.div
             key={entry._id}
             initial={{ opacity: 0, y: 10 }}
@@ -57,7 +55,7 @@ const QueueList = () => {
               className={`font-medium
                 ${theme === "dark" ? "text-[#e5e7eb]" : "text-slate-900"}`}
             >
-              {entry.userId===user._id?"You":"Anonymous"}
+              {entry.userId === user._id ? "You" : "Anonymous"}
             </span>
 
             {/* Status */}
@@ -75,7 +73,7 @@ const QueueList = () => {
       </AnimatePresence>
 
       {/* Join button */}
-      {!isJoined && queue.isActive &&  (
+      {!isJoined && queue.isActive && (
         <motion.button
           whileHover={{ y: -1 }}
           whileTap={{ scale: 0.97 }}
