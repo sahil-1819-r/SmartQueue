@@ -4,16 +4,16 @@ import { setUser } from "../redux/features/userSlilce";
 import api from "../api/api.js";
 import { motion } from "framer-motion";
 import { Lock, Mail } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
 
 const Login = () => {
   motion;
+  const {state} = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let theme = useSelector((state) => state.theme.mode);
   const formData = useSelector((state) => state.login.formData);
-  const user = useSelector((state) => state.user.currentUser);
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -21,7 +21,7 @@ const Login = () => {
         withCredentials: true,
       });
       dispatch(setUser(response.data.user));
-      navigate(window.location);
+      navigate(state?.from?.pathname || '/', { replace: true });
     } catch (err) {
       console.error(err);
     }
