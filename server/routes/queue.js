@@ -7,6 +7,7 @@ import {
   hub,
   createQueue,
   showQueue,
+  leaveQueue,
 } from "../controllers/queue.controller.js";
 import { authorizeRoles } from "../middlewares/authorizeRoles.js";
 
@@ -16,21 +17,14 @@ router.post(
   "/queue",
   auth,
   authorizeRoles(["admin"]),
-  asyncHandler(createQueue)
+  asyncHandler(createQueue),
 );
 
-router.get(
-  "/queue/:queueId",
-  auth,
-  authorizeRoles(["user", "admin"]),
-  asyncHandler(showQueue)
-);
 
-router.post(
-  "/queue/:queueId/join",
-  auth,
-  authorizeRoles(["user"]),
-  asyncHandler(joinQueue)
-);
+router
+  .route("/queue/:queueId")
+  .get(auth, authorizeRoles(["user", "admin"]), asyncHandler(showQueue))
+  .post(auth, authorizeRoles(["user", "admin"]), asyncHandler(joinQueue))
+  .patch(auth, authorizeRoles(["user", "admin"]), asyncHandler(leaveQueue));
 
 export default router;

@@ -20,16 +20,16 @@ export const createQueue = async (req, res) => {
 
 export const showQueue = async (req, res) => {
   let { queueId } = req.params;
-  const queue = await Service.findById({ _id:queueId });
-  const tickets = await Ticket.find({queueId});
-  res.status(200).json({info:queue,tickets:tickets});
+  const queue = await Service.findById({ _id: queueId });
+  const tickets = await Ticket.find({ queueId });
+  res.status(200).json({ info: queue, tickets: tickets });
 };
 
 export const joinQueue = async (req, res) => {
   let { queueId } = req.params;
   let userId = req.userId;
   let queue = await Queue.findById({ _id: queueId });
-  
+
   if (!queue || !queue.isActive) {
     throw new CustomError(400, "Queue is not Active");
   }
@@ -50,4 +50,15 @@ export const joinQueue = async (req, res) => {
   });
   await ticket.save();
   res.status(201).json(ticket);
+};
+
+export const leaveQueue = async (req, res) => {
+  let userId = req.body;
+  if (!userId) throw new CustomError(404, "UserId not found");
+  console.log("userId", userId);
+  const ticketToBeDeleted = await Ticket.findOne(userId);
+  const deleteInfo = await Ticket.findOneAndDelete(userId);
+  console.log("ticket:", ticketToBeDeleted);
+  console.log("deleteInfo:", deleteInfo);
+  res.status(201).json({ deleteInfo });
 };
