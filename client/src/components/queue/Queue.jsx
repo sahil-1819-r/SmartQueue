@@ -12,12 +12,30 @@ import { setInfo, setTickets } from "../../redux/features/queueSlice.js";
 const Queue = () => {
   motion;
   const navigate = useNavigate();
-  const theme = useSelector((state) => state.theme.mode);
-  const { info:queue, tickets } = useSelector((state) => state.queue);
-  const dispatch = useDispatch();
   const { queueId } = useParams();
-  const [loading, setLoading] = useState(true);
+  const user = useSelector((state) => state.user.currentUser);
+  const theme = useSelector((state) => state.theme.mode);
+  const { info: queue, tickets } = useSelector((state) => state.queue);
+  const dispatch = useDispatch();
 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const joinQueue = async () => {
+    try {
+      const response = await api.post(`/queue/${queueId}/join`);
+      const updatedQueue = [response.data];
+      dispatch(setTickets(updatedQueue));
+      setError(null);
+    } catch (err) {
+      console.log(err);
+      setError(err.response?.data?.message || "Something went Wrong");
+    }
+  };
+  const isJoined = tickets.some((entry) => entry.userId === user?._id);
+  const leaveQueue = async () => {
+    const res = await api.patch(`/queue/${queueId}/leave`);
+    dispatch(setTickets(res.data));
+  };
   useEffect(() => {
     let isMounted = true;
 
@@ -25,15 +43,17 @@ const Queue = () => {
       const start = Date.now();
       const res = await api.get(`/queue/${queueId}`);
       dispatch(setInfo(res.data.info));
-
       const elapsed = Date.now() - start;
       const MIN_TIME = 500;
-      setTimeout(() => {
-        if (isMounted) {
-          dispatch(setTickets(res.data.tickets));
-          setLoading(false);
-        }
-      }, Math.max(0, MIN_TIME - elapsed));
+      setTimeout(
+        () => {
+          if (isMounted) {
+            dispatch(setTickets(res.data.tickets));
+            setLoading(false);
+          }
+        },
+        Math.max(0, MIN_TIME - elapsed),
+      );
     };
 
     fetchQueue();
@@ -41,7 +61,7 @@ const Queue = () => {
     return () => {
       isMounted = false;
     };
-  }, [queueId, dispatch]);
+  }, [queueId, dispatch, tickets]);
 
   return (
     <div
@@ -121,10 +141,15 @@ const Queue = () => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.35, ease: "easeOut" }}
             >
-              {queue.length === 0 ? (
-                <EmptyQueueState />
+              {tickets.length === 0 ? (
+                <EmptyQueueState joinQueue={joinQueue} />
               ) : (
-                <QueueList />
+                <QueueList
+                  joinQueue={joinQueue}
+                  leaveQueue={leaveQueue}
+                  error={error}
+                  isJoined={isJoined}
+                />
               )}
             </motion.div>
           )}

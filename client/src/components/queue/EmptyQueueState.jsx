@@ -1,23 +1,11 @@
 import { motion } from "framer-motion";
 import { UserPlus } from "lucide-react";
-import api from "../../api/api.js";
-import { useNavigate } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
-import { setTickets } from "../../redux/features/queueSlice.js";
+import { useSelector } from "react-redux";
 
-const EmptyQueueState = ({ queueId }) => {
+const EmptyQueueState = ({ joinQueue }) => {
   motion;
   const theme = useSelector((state) => state.theme.mode);
-  let queue = useSelector((state) => state.queue.tickets);
-  console.log("tickets:", queue);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const joinQueue = async () => {
-    const response = await api.post(`/queue/${queueId}/join`);
-    dispatch(setTickets([...queue, response.data]));
-    navigate(`/queue/${queueId}`);
-  };
+  const { info: queue } = useSelector((state) => state.queue);
 
   return (
     <motion.div
@@ -49,7 +37,7 @@ const EmptyQueueState = ({ queueId }) => {
       </p>
 
       {/* Action */}
-      {console.log(queue.isActive) && (
+      {queue.isActive && (
         <motion.button
           whileHover={{ y: -1 }}
           whileTap={{ scale: 0.97 }}

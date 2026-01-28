@@ -1,42 +1,15 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { UserPlus } from "lucide-react";
-import { useParams } from "react-router";
-import api from "../../api/api.js";
-import { useDispatch, useSelector } from "react-redux";
-import { setTickets } from "../../redux/features/queueSlice.js";
-import { useState } from "react";
+import { useSelector } from "react-redux";
 import Error from "../utils/Error.jsx";
 
-const QueueList = () => {
+const QueueList = ({ joinQueue, leaveQueue, error, isJoined }) => {
   motion;
-  const [error, setError] = useState(null);
+
   const user = useSelector((state) => state.user.currentUser);
   const theme = useSelector((state) => state.theme.mode);
-  const { queueId } = useParams();
-  const dispatch = useDispatch();
   const { info: queue, tickets } = useSelector((state) => state.queue);
   console.log("tickets", tickets);
-
-  const joinQueue = async () => {
-    try {
-      const response = await api.post(`/queue/${queueId}`);
-      const updatedQueue = [...tickets, response.data];
-      dispatch(setTickets(updatedQueue));
-      setError(null);
-    } catch (err) {
-      console.log(err);
-      setError(err.response?.data?.message || "Something went Wrong");
-    }
-  };
-
-  const leaveQueue = async () => {
-    const res = await api.patch(`/queue/${queueId}`, { userId: user._id });
-    // const updatedQueue = tickets.remove;
-    console.log(res.data);
-    // dispatch(setTickets());
-  };
-
-  const isJoined = tickets.some((entry) => entry.userId === user?._id);
 
   return (
     <div className="space-y-5">
@@ -69,7 +42,7 @@ const QueueList = () => {
               className={`font-medium
                 ${theme === "dark" ? "text-[#e5e7eb]" : "text-slate-900"}`}
             >
-              {entry.userId === user._id ? "You" : "Anonymous"}
+              {entry.userId === user?._id ? "You" : "Anonymous"}
             </span>
 
             {/* Status */}
