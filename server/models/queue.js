@@ -6,9 +6,10 @@ const serviceSchema = new Schema(
       type: String,
       required: true,
     },
-    organisation: {
+    orgId: {
       type: Schema.Types.ObjectId,
       ref: "Organisation",
+      required:true
     },
     isActive: {
       type: Boolean,

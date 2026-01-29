@@ -2,10 +2,10 @@ import express from "express";
 import cors from "cors";
 import queueRoutes from "./routes/queue.js";
 import authRoutes from "./routes/auth.js";
+import orgRoutes from "./routes/org.js";
 import cookieParser from "cookie-parser";
 import centralErrorHandler from "./middlewares/centralErrorHandler.js";
 const app = express();
-
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -16,7 +16,7 @@ app.use(
     origin: "http://localhost:5173",
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
-  })
+  }),
 );
 
 app.get("/api", (req, res) => {
@@ -25,6 +25,7 @@ app.get("/api", (req, res) => {
 
 app.use("/api", authRoutes);
 app.use("/api", queueRoutes);
+app.use("/api", orgRoutes);
 
 app.use(centralErrorHandler);
 export default app;

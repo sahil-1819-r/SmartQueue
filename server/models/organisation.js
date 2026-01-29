@@ -1,20 +1,16 @@
-import mongoose , {mongo, Schema} from 'mongoose'
+import mongoose, { mongo, Schema } from "mongoose";
 
 const orgSchema = new Schema({
-    name:{
-        type:String,
-        required:true,
-        trim:true
-    },
-    services:[
-        {
-            type:Schema.Types.ObjectId,
-            ref:"Service"
-        }
-    ]
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+});
 
-})
-
-
-
-export default mongoose.model("Organisation",orgSchema); 
+export default mongoose.model("Organisation", orgSchema);
