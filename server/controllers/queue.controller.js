@@ -2,6 +2,7 @@ import Ticket from "../models/ticket.js";
 import Queue from "../models/queue.js";
 import { CustomError } from "../middlewares/CustomError.js";
 import Service from "../models/queue.js";
+import Organisation from '../models/organisation.js'
 export const hub = async (req, res) => {
   let hub = await Queue.find();
   res.status(200).json(hub);
@@ -9,11 +10,15 @@ export const hub = async (req, res) => {
 
 export const createQueue = async (req, res) => {
   let { name, startAt, endAt } = req.body;
+  const userId = req.userId;
+  const org = await Organisation.findOne({userId});
+  const orgId = org._id;
   console.log(req.user);
   let queue = await Queue.create({
     name,
     startAt,
     endAt,
+    orgId
   });
   res.status(201).json(queue);
 };

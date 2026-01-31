@@ -11,25 +11,34 @@ export const createOrg = async (req, res) => {
   if (!userId) {
     throw new CustomError(400, "User Not Found");
   }
+  try {
+    const org = await Organisation.create({
+      name,
+      userId,
+    });
 
-  let response = await Organisation.create({
-    name: name,
-    userId: userId,
-  });
-  console.log(response);
-  res.status(201).json({ response });
+    res.status(201).json(org);
+  } catch (err) {
+    if (err.code === 11000) {
+      throw new CustomError(400, "Organisation already exists for this admin");
+    }
+    throw err;
+  }
 };
 
 export const getQueues = async (req, res) => {
   let userId = req.userId;
-  let org = await Organisation.findOne(userId);
-  let affiliatedQueues = await Queue.find(org._id);
+  let org = await Organisation.findOne({ userId });
+  let affiliatedQueues = await Queue.find({ orgId: org._id });
+  console.log("affiliatedQueues:", affiliatedQueues);
   res.status(200).json(affiliatedQueues);
 };
 
-export const getAllOrgs = async (req, res) => {
+export const getMyOrg = async (req, res) => {
   const userId = req.userId;
   if (!userId) throw new CustomError(400, "User Not Found");
-  let orgs = Organisation.find(userId);
-  res.status(200).json(orgs);
+  let org = await Organisation.findOne({ userId });
+  res.status(200).json({
+    organisation: org || null,
+  });
 };

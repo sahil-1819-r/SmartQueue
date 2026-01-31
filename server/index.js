@@ -4,7 +4,7 @@ import app from './app.js'
 const port = process.env.PORT;
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/SmartQueue")
+  .connect("mongodb+srv://rishikm215_db_user:DYyKbq7EMKvH5Xq7@smartqueue.xt7zono.mongodb.net/?appName=SmartQueue")
   .then(() => {
     app.listen(port, () => {
       console.log("listening on port" + `http://localhost:${port}`);
