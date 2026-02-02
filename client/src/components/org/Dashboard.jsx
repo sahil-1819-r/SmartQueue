@@ -168,7 +168,7 @@ export default function Dashboard() {
 
         {/* Placeholder cards (future-proof layout) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20">
-          {["Queues", "Activity", "Insights"].map((label, i) => (
+          {["Queues"].map((label, i) => (
             <motion.div
               key={label}
               initial={{ opacity: 0, y: 20 }}
